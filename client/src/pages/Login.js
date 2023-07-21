@@ -8,9 +8,9 @@ const Login = () => {
   const navigate = useNavigate();
   const onFinishHandler = async (values) => {
     try {
-      const res = axios.post("/api/v1/user/login", values);
-      if ((await res).data.success) {
-        localStorage.setItem("token", (await res).data.token);
+      const res = await axios.post("/api/v1/user/login", values);
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
         message.success("Login Succesfully");
         navigate("/");
       } else {
