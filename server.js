@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
     message: "Server Running",
   });
 });
-app.use("api/v1/user", require("./routes/userRoutes"));
+app.use("/api/v1/user", require("./routes/userRoutes"));
 
 //port
 const port = process.env.PORT || 8080;
