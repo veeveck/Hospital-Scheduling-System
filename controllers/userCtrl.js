@@ -84,7 +84,7 @@ const applyDocController = async (req, res) => {
     const notification = adminUser.notification;
     notification.push({
       type: "doctor-apply-request",
-      message: `${newDoctor.firstName} ${newDoctor.lastName} apllied for doctor account`,
+      message: `${newDoctor.firstName} ${newDoctor.lastName} applied for doctor account`,
       data: {
         docId: newDoctor._id,
         name: newDoctor.firstName + "  " + newDoctor.lastName,
@@ -105,9 +105,33 @@ const applyDocController = async (req, res) => {
     });
   }
 };
+const getAllNotificationController = async (req, res) => {
+  try {
+    const user = await userModel.findOne({ _id: req.body.userId });
+    const viewnotification = user.notificationview;
+    const notification = user.notification;
+    viewnotification.push(...notification);
+    user.notification = [];
+    user.notificationview = notification;
+    const updatedUser = await user.save();
+    res.status(200).send({
+      success: true,
+      message: "All notifications are read",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error in Notification",
+      success: false,
+      error,
+    });
+  }
+};
 module.exports = {
   loginController,
   registerController,
   authController,
   applyDocController,
+  getAllNotificationController,
 };
