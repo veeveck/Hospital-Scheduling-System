@@ -1,10 +1,41 @@
 import React from "react";
 import Layout from "./../components/Layout";
 import { Form, Row, Col, Input, TimePicker } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import axios from "axios";
+import { message } from "antd";
 
 const ApplyDoctor = () => {
-  const handleFinish = (values) => {
-    console.log(values);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleFinish = async (values) => {
+    try {
+      dispatch(showLoading());
+      const res = await axios.post(
+        "/api/v1/user/apply-doctor",
+        { ...values, userId: user._id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch(hideLoading());
+      if (res.data.success) {
+        message.success(res.data.success);
+        navigate("/");
+      } else {
+        message.error(res.data.success);
+      }
+    } catch (error) {
+      dispatch(hideLoading());
+      console.log(error);
+      message.error("Something went wrong");
+    }
   };
   return (
     <Layout>
@@ -21,6 +52,8 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your First Name" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item
               label="Last Name"
               name="lastName"
@@ -29,6 +62,8 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your Last Name" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item
               label="Phone"
               name="phone"
@@ -37,6 +72,8 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your Contact Number" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item
               label="Email"
               name="email"
@@ -45,9 +82,13 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your Email" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item label="Website" name="website">
               <Input type="text" placeholder="Your Website" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item
               label="Address"
               name="address"
@@ -69,6 +110,8 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your Specialization" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item
               label="Experience"
               name="experience"
@@ -77,6 +120,8 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your Experience" />
             </Form.Item>
+          </Col>
+          <Col xs={24} md={24} lg={8}>
             <Form.Item
               label="Fees"
               name="fees"
@@ -85,16 +130,24 @@ const ApplyDoctor = () => {
             >
               <Input type="text" placeholder="Your Fees per consultation" />
             </Form.Item>
-            <Form.Item label="Timings" name="timings" required>
-              <TimePicker.RangePicker />
+          </Col>
+          <Col xs={24} md={24} lg={8}>
+            <Form.Item
+              label="Timings"
+              name="timings"
+              required
+              rules={[{ required: true }]}
+            >
+              <TimePicker.RangePicker format="HH:mm" />
             </Form.Item>
           </Col>
+          <Col xs={24} md={24} lg={8}></Col>
+          <Col xs={24} md={24} lg={8}>
+            <button className="btn btn-primary form-btn" type="Submit">
+              Submit
+            </button>
+          </Col>
         </Row>
-        <div className="d-flex justify-content-end">
-          <button className="btn btn-primary" type="Submit">
-            Submit
-          </button>
-        </div>
       </Form>
     </Layout>
   );

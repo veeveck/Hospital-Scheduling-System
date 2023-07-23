@@ -40,6 +40,10 @@ const doctorSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Fees is required"],
     },
+    status: {
+      type: String,
+      default: "pending",
+    },
     timings: {
       type: Object,
       required: [true, "Timings are required"],
