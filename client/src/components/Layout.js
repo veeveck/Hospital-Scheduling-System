@@ -14,7 +14,29 @@ const Layout = ({ children }) => {
   };
   const { user } = useSelector((state) => state.user);
   const location = useLocation();
-  const SidebarMenu = user?.isAdmin ? AdminMenu : UserMenu;
+  //Doctor Menu
+  const DoctorMenu = [
+    {
+      name: "Home",
+      path: "/",
+      icon: "fa-solid fa-house",
+    },
+    {
+      name: "Appointments",
+      path: "/appointments",
+      icon: "fa-solid fa-list",
+    },
+    {
+      name: "Profile",
+      path: `doctor/profile/${user?._id}`,
+      icon: "fa-solid fa-user",
+    },
+  ];
+  const SidebarMenu = user?.isAdmin
+    ? AdminMenu
+    : user?.isDoctor
+    ? DoctorMenu
+    : UserMenu;
   return (
     <>
       <div className="main">
