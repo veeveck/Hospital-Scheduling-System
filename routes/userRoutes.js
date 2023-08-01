@@ -6,8 +6,10 @@ const {
   applyDocController,
   getAllNotificationController,
   deleteAllNotificationController,
+  getAllDocsController,
 } = require("../controllers/userCtrl");
 const authMiddleware = require("../middlewares/authMiddleware");
+const { getAllDoctorsController } = require("../controllers/adminCtrl");
 
 const router = express.Router();
 
@@ -21,10 +23,12 @@ router.post("/getUserData", authMiddleware, authController);
 router.post("/apply-doctor", authMiddleware, applyDocController);
 //Notifications
 router.post("/get-notifications", authMiddleware, getAllNotificationController);
-//
+//Delete Notification
 router.post(
   "/delete-notifications",
   authMiddleware,
   deleteAllNotificationController
 );
+//Get All Doctors
+router.get("/get-all-doctors", authMiddleware, getAllDocsController);
 module.exports = router;
