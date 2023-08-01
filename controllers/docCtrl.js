@@ -37,4 +37,25 @@ const updateProfileController = async (req, res) => {
     });
   }
 };
-module.exports = { getDocInfoController, updateProfileController };
+const getDocByIdController = async (req, res) => {
+  try {
+    const doctor = await docModel.findOne({ _id: req.body.docId });
+    res.status(200).send({
+      success: true,
+      message: "Single Doc Info fetched",
+      data: doctor,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in getting Doc Info",
+    });
+  }
+};
+module.exports = {
+  getDocInfoController,
+  updateProfileController,
+  getDocByIdController,
+};
